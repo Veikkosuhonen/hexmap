@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class TileTerrain : MonoBehaviour
 {
 
     private static int diameter = 256;

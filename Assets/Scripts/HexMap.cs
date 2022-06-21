@@ -1,51 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class HexMap : MonoBehaviour
 {
 
-    
 
-    public int width = 6;
-    public int height = 6;
+	[SerializeField]
+	private int Width = 6;
 
-	public List<GameObject> tiles;
+	[SerializeField]
+	private int Height = 6;
 
+	[SerializeField]
+	private List<GameObject> Tiles;
 
+	Hex[] hexes;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public void Generate() {
+		ResetMap();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-	GameObject[] cells;
-
-	void Awake() {
-		cells = new GameObject[height * width];
-
-		for (int z = 0, i = 0; z < height; z++) {
-			for (int x = 0; x < width; x++) {
-				CreateCell(x, z, i++);
+		for (int z = 0, i = 0; z < Height; z++) {
+			for (int x = 0; x < Width; x++) {
+				CreateHex(x, z, i++);
 			}
+		}
+
+		foreach (var hex in hexes) {
+
+			var xOffset = hex.ZIndex % 2 == 0 ? 0 : 1;
+
+			hex.NE = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex + 1 && cell.XIndex == hex.XIndex - xOffset);
+			hex.E = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex && cell.XIndex == hex.XIndex + 1);
+			hex.SE = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex - 1 && cell.XIndex == hex.XIndex + xOffset);
+			hex.SW = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex - 1 && cell.XIndex == hex.XIndex - (1 - xOffset));
+			hex.W = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex && cell.XIndex == hex.XIndex - 1);
+			hex.NW = hexes.FirstOrDefault(cell => cell.ZIndex == hex.ZIndex + 1 && cell.XIndex == hex.XIndex - (1 - xOffset));
 		}
 	}
 
-	void CreateCell(int x, int z, int i) {
+	void CreateHex(int x, int z, int i) {
 		Vector3 position;
-		position.x = (x + z * 0.5f - z / 2) * Tile.InnerDiameter;
+		position.x = (x + z * 0.5f - z / 2) * TileTerrain.InnerDiameter;
 		position.y = Random.value * 0.3f;
-		position.z = z * Tile.OuterDiameter / 2 * 1.5f;
+		position.z = z * TileTerrain.OuterDiameter / 2 * 1.5f;
 
-		GameObject cell = cells[i] = Instantiate(tiles[Mathf.FloorToInt(Random.value * tiles.Count)]);
+		GameObject cell = Instantiate(Tiles[Mathf.FloorToInt(Random.value * Tiles.Count)]);
 		cell.transform.SetParent(transform, false);
 		cell.transform.localPosition = position;
+
+		var hex = cell.GetComponent<Hex>();
+		hex.XIndex = x;
+		hex.ZIndex = z;
+
+		hexes[i] = hex;
+	}
+
+    public void ResetMap() {
+        hexes = new Hex[Width * Height];
+		transform.GetComponentsInChildren<Hex>().Select(it => it.gameObject).ToList().ForEach(it => DestroyImmediate(it));
 	}
 }

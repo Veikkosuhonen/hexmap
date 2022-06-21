@@ -7,10 +7,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3418884279250216284, guid: 8df98951cd1585345b7d15a1227aaf99,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6515420564713573015, guid: 8df98951cd1585345b7d15a1227aaf99,
+        type: 3}
+      propertyPath: HexType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7853062991329391765, guid: 8df98951cd1585345b7d15a1227aaf99,
         type: 3}
       propertyPath: m_Name
-      value: Mountain
+      value: Mountain Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7853062991329391765, guid: 8df98951cd1585345b7d15a1227aaf99,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7853062991329391766, guid: 8df98951cd1585345b7d15a1227aaf99,
         type: 3}
